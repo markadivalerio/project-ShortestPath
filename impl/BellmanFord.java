@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
+
 import objs.Edge;
 import objs.Graph;
 import objs.Route;
@@ -171,23 +173,30 @@ public class BellmanFord extends ShortestPath
     	
 //        for(String start: airports.keySet())
 //        for(Vertex start: graphObj.getEdges(airports.get(source)))
-        for(Vertex start: graphObj.getVertices())
+//        ArrayList<Vertex> neighbors = new ArrayList<Vertex>(graphObj.getVertices());
+//        Vertex src = airports.get(source);
+//        airports.
+//        neighbors.add(src);
+        ArrayList<String> originVertexes = new ArrayList<String>(airports.keySet());
+        originVertexes.add(0, source);
+        for(String startCode: originVertexes)
         {
-//        	Vertex start = airports.get(startCode);
+        	Vertex start = airports.get(startCode);
 //        	if(start.equals(source)) continue;
 //        	List<Vertex> neighbors = graphObj.getEdges(airports.get(start.getCode()));
 //            for(Vertex nextVertex: neighbors)
 //        	for(String nextVertexCode: airports.keySet())
-        	for(Vertex nextVertex: graphObj.getVertices())
+        	for(Vertex nextVertex: graphObj.getEdges(start))
             {
+        		String nextVertexCode = nextVertex.getCode();
 //        		Vertex nextVertex = airports.get(nextVertexCode);
 //            	long test = calculateDistance(start, nextVertex);
-            	long nextVertexDistance = shortestDistTo.get(start.getCode()) + calculateDistance(start, nextVertex);
+            	long proposedVertexDistance = shortestDistTo.get(startCode) + calculateDistance(start, nextVertex);
 //            	System.out.println(start.getCode() + " -> " + nextVertex.getCode() + " = " + nextVertexDistance + " (vs "+shortestDistTo.get(start.getCode())+")");
-            	if(nextVertexDistance < shortestDistTo.get(nextVertex.getCode()))
+            	if(proposedVertexDistance < shortestDistTo.get(nextVertexCode))
             	{
-            		shortestDistTo.put(nextVertex.getCode(), nextVertexDistance);
-            		previous.put(nextVertex.getCode(), start.getCode());
+            		shortestDistTo.put(nextVertexCode, proposedVertexDistance);
+            		previous.put(nextVertexCode, startCode);
             	}
 //            	graphObj.getEdges(airports.get(code)
 //                long distance = calculateDistance(airports.get(source), neighbor);

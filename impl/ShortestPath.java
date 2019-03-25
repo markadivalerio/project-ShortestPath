@@ -45,12 +45,15 @@ public class ShortestPath implements SPAlgorithm
     	src = source;
     	dest = destination;
     	this.graph = graph;
-//    	graphObj = new Graph(false);
-//        dataObj = BaseData.getInstance();
-//        if(this.init())
-//        {
-//        	buildGraph();
-//        }
+    	if(graph == null)
+    	{
+	    	graphObj = new Graph(false);
+	        dataObj = BaseData.getInstance();
+	        if(this.init())
+	        {
+	        	buildGraph();
+	        }
+    	}
     	time_ms = System.currentTimeMillis();
     }
 
@@ -132,15 +135,27 @@ public class ShortestPath implements SPAlgorithm
     	Vertex prev = null;
     	long totalDist = 0;
         for(String code : shortestRoute.getAirports()){
-//        	str += airports.get(code).toString() + "\n";
-        	str += graph.getVertex(code).toString();
-        	if(prev != null)
+        	try
         	{
-        		totalDist += Edge.calculateDistance(graph.getVertex(code), prev);
-        		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(graph.getVertex(code), prev)+". Total Dist="+totalDist;
-        		
+        		str += airports.get(code).toString();
+        		if(prev != null)
+            	{
+            		totalDist += Edge.calculateDistance(airports.get(code), prev);
+            		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(airports.get(code), prev)+". Total Dist="+totalDist;
+            	}
+        		prev = airports.get(code);
         	}
-        	prev = graph.getVertex(code);
+        	catch(NullPointerException e)
+        	{
+        		str += graph.getVertex(code).toString();
+        		if(prev != null)
+            	{
+            		totalDist += Edge.calculateDistance(graph.getVertex(code), prev);
+            		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(graph.getVertex(code), prev)+". Total Dist="+totalDist;
+            	}
+        		prev = graph.getVertex(code);
+        	}
+
         	str += "\n";
         }
         str += "\n";
