@@ -1,15 +1,10 @@
-package impl;
+package objs;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import objs.Edge;
-import objs.Flight;
-import objs.Graph;
-import objs.Route;
-import objs.Vertex;
 import util.BaseData;
 import util.Coordinate;
 import util.Haversine;
@@ -24,21 +19,6 @@ public class ShortestPath implements SPAlgorithm
 	protected Set<Flight> flights;
 	
 	protected long time_ms;
-
-	public ShortestPath()
-	{
-		this("SFO", "CDG", new Graph(true));
-	}
-	
-	public ShortestPath(Graph g)
-	{
-		this("SFO", "CDG", g);
-	}
-
-    public ShortestPath(String source, String destination)
-    {
-    	this(source, destination, new Graph(true));
-    }
     
     public ShortestPath(String source, String destination, Graph graph)
     {

@@ -1,6 +1,4 @@
-package impl;
-
-import objs.Route;
+package objs;
 
 public interface SPAlgorithm {
 	public Route findShortestPath(String source, String destination);

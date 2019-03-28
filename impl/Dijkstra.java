@@ -9,25 +9,11 @@ import objs.Edge;
 import objs.Graph;
 import objs.MinHeap;
 import objs.Route;
+import objs.ShortestPath;
 import objs.Vertex;
 
 public class Dijkstra extends ShortestPath
 {
-	public Dijkstra()
-	{
-		super();
-	}
-	
-	public Dijkstra(Graph g)
-	{
-		super(g);
-	}
-
-    public Dijkstra(String source, String destination)
-    {
-    	super(source, destination);
-    }
-    
     public Dijkstra(String source, String destination, Graph g)
     {
     	super(source, destination, g);
