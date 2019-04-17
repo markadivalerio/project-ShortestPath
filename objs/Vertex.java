@@ -1,6 +1,8 @@
 package objs;
 
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
 public class Vertex{
 
@@ -9,13 +11,20 @@ public class Vertex{
     private String country;
     private double latitude;
     private double longitude;
-
-    public Vertex() {
-        this.code = null;
-        this.name = null;
-        this.country = null;
-        this.latitude = 0;
-        this.longitude = 0;
+    private HashMap<String, Object> customAttr;
+    public Vertex previousParent;
+    public Vertex nextChild;
+    
+    public Vertex(String id)
+    {
+    	code = id;
+    	name = id;
+    	country = "";
+        latitude = 0;
+        longitude = 0;
+        customAttr = new HashMap<String, Object>();
+        previousParent = null;
+        nextChild = null;
     }
 
     public Vertex(String code, String name, String country, double latitude, double longitude) {
@@ -24,6 +33,9 @@ public class Vertex{
         this.country = country;
         this.latitude = latitude;
         this.longitude = longitude;
+        customAttr = new HashMap<String, Object>();
+        previousParent = null;
+        nextChild = null;
     }
 
     public String getCode() {
@@ -46,6 +58,31 @@ public class Vertex{
         return longitude;
     }
     
+    public Object get(String attrKey)
+    {
+    	return customAttr.getOrDefault(attrKey, null);
+    }
+    
+    public Object get(String attrKey, Object defaultValue)
+    {
+    	return customAttr.getOrDefault(attrKey, defaultValue);
+    }
+    
+    public void set(String attrKey, Object attrValue)
+    {
+    	customAttr.put(attrKey, attrValue);
+    }
+    
+    public int attrSize()
+    {
+    	return customAttr.size();
+    }
+    
+    public Set<String> attrKeys()
+    {
+    	return customAttr.keySet();
+    }
+    
     public long getDistanceTo(Vertex x)
     {
     	return Edge.calculateDistance(this, x);
@@ -58,19 +95,28 @@ public class Vertex{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vertex node = (Vertex) o;
-        boolean bRetVal = false;
+        
+//        return node.getCode().equals(this.getCode());
+
         if (Double.compare(node.latitude, latitude) == 0 &&
                 Double.compare(node.longitude, longitude) == 0 &&
                 code.equals(node.code) &&
                 name.equals(node.name) &&
-                country.equals(node.country)) {
-            bRetVal = true;
-            //System.out.println(code + " retur val = " + bRetVal);
-        }else{
-            //System.out.println(code + " retur val = " + bRetVal);
+                country.equals(node.country))
+        {
+        	if(!customAttr.keySet().equals(node.attrKeys()))
+        		return false;
+            for(String attrKey: customAttr.keySet())
+            {
+            	if(!customAttr.get(attrKey).equals(node.get(attrKey)))
+            	{
+            		return false;
+            	}
+            }
+            return true;
         }
 
-        return bRetVal;
+        return false;
     }
 
     @Override

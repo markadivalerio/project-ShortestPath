@@ -1,9 +1,12 @@
 package objs;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import util.BaseData;
@@ -25,11 +28,17 @@ public class Graph
 
 	public Graph(boolean loadBaseData)
 	{
+		vertices = new HashMap<String, Vertex>();
+		edges = new HashMap<String, Edge>();
 		adjVertices = new HashMap<Vertex, List<Vertex>>();
 		connectedVertices = new HashMap<String, ArrayList<Vertex>>();
 		vertexEdges = new HashMap<String, ArrayList<Edge>>();
 		if(loadBaseData)
-			buildFromBaseData(true);
+		{
+//			buildFromBaseData(true);
+			loadFile("project-ShortestPath/data/USA-road-d.NY.gr");
+			System.out.println(edges.size());
+		}
 	}
 
 	public Set<Vertex> getVertices()
@@ -68,7 +77,7 @@ public class Graph
 
 	public void addVertex(Vertex v)
 	{
-		if (!adjVertices.containsKey(v))
+		if(!adjVertices.containsKey(v))
 		{
 			adjVertices.putIfAbsent(v, new ArrayList<Vertex>());
 		}
@@ -181,9 +190,8 @@ public class Graph
 	public void buildFromBaseData(Boolean undirectedEdges)
 	{
 		BaseData bdata = BaseData.getInstance();
-		bdata.initialize();
 
-		vertices = bdata.getAirports();
+		vertices = bdata.getVertices();
 		Map<String, Edge> tempEdges = bdata.getFlightEdges();
 		edges = new HashMap<String, Edge>();
 		for(String edgeIndex : tempEdges.keySet())
@@ -193,11 +201,37 @@ public class Graph
 		}
 
 	}
+	
+	public void loadFile(String filepath)
+    {
+    	try
+    	{
+    		File file = new File(filepath);
+    		Scanner inputStream = new Scanner(file);
+            inputStream.useDelimiter("\n");
+            while(inputStream.hasNext())
+            {
+            	String[] line = inputStream.next().split(" ");
+//            	System.out.println(Arrays.toString(line));
+            	if(!line[0].equals("a"))
+            		continue;
+            	Vertex src = new Vertex(line[1]);
+            	Vertex dest = new Vertex(line[2]);
+            	Edge e = new Edge(src, dest, Integer.parseInt(line[3]));
+            	addEdge(e, false);
+            }
+            
+            inputStream.close();
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    	}
+    }
 
 	@Override
 	public String toString()
 	{
-
 		StringBuilder sb = new StringBuilder();
 		sb.append("Graph {\n");
 		sb.append("size = " + this.size() + " \n");

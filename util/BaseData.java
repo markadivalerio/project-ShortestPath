@@ -18,8 +18,6 @@ public class BaseData {
     private Set<Flight> flights;
     private Map<String, Edge> flightEdges;
 
-    private int TOTAL_AIRPORTS;
-    private int TOTAL_UNIQUE_FLIGHTS;
 
     private BaseData() {
         airport_file = "project-ShortestPath/data/airports.dat";
@@ -29,35 +27,32 @@ public class BaseData {
         airports = new HashMap<String, Vertex>();
         flights = new HashSet<Flight>();
         flightEdges = new HashMap<String, Edge>();
-        TOTAL_AIRPORTS = 0;
-        TOTAL_UNIQUE_FLIGHTS = 0;
+        
+//        try
+//        {
+//            File file = new File(airport_file);
+//            loadVertices(file);
+//            file = new File(flights_file);
+//            loadEdges(file);
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//        
     }
+    
     public static BaseData getInstance(){
         if (single_instance == null)
             single_instance = new BaseData();
         return single_instance;
     }
 
-    public boolean initialize(){
-        boolean res = (this.loadAirports() && this.loadFlights());
-//        if(res)
-//        	res &= 
-        return res;
-    }
-    
-    public int getAirportsCount() {
-        return TOTAL_AIRPORTS;
-    }
-
-    public int getFlightsCounts() {
-        return TOTAL_UNIQUE_FLIGHTS;
-    }
-
-    public Map<String, Vertex> getAirports() {
+    public Map<String, Vertex> getVertices() {
         return airports;
     }
 
-    public Set<Flight> getFlights() {
+    public Set<Flight> getEdges() {
         return flights;
     }
     
@@ -66,13 +61,26 @@ public class BaseData {
         return flightEdges;
     }
     
-    private boolean loadAirports(){
+//    private String[] getVertexSyntax()
+//    {
+//    	String[] syntax = new i[]{1};
+//    	return syntax;
+//    }
+//    	
+//    private String[] getEdgeSyntax()
+//    {
+//		String[] syntax = new String{};
+//		return syntax;
+//    }
+
+    
+    private boolean loadAirports(File file)
+    {
         boolean bRetVal = true;
-        try{
-            File file = new File(airport_file);
+        try
+        {
             Scanner inputStream = new Scanner(file);
             inputStream.useDelimiter("\n");
-            int count =0;
             while(inputStream.hasNext()) {
                 //read single line, put in string
                 String line = inputStream.next();
@@ -89,7 +97,6 @@ public class BaseData {
                                 Double.parseDouble(items.get(7))); // longitude
                         this.airports.putIfAbsent(airport_code, airport);
                         //System.out.println("code="+airport_code);
-                        count++;
 
                     }catch(NumberFormatException e){
                         e.printStackTrace();
@@ -98,13 +105,8 @@ public class BaseData {
                 }
 
             }
-            this.TOTAL_AIRPORTS = count;
-            //System.out.println("total airports = " + count);
             inputStream.close();
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-            bRetVal = false;
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
             bRetVal = false;
         }
@@ -112,10 +114,15 @@ public class BaseData {
         return bRetVal;
     }
 
-    private boolean loadFlights(){
+    private boolean loadEdges(File file){
+    	if(file == null)
+    	{
+    		return true;
+    	}
+    	
         boolean bRetVal = true;
-        try{
-            File file = new File(flights_file);
+        try
+        {
             Scanner inputStream = new Scanner(file);
             inputStream.useDelimiter("\n");
             int uniqueCount = 0;
@@ -148,12 +155,7 @@ public class BaseData {
                  }
             }
             inputStream.close();
-            TOTAL_UNIQUE_FLIGHTS = uniqueCount;
-            System.out.println("Total flights = " + total + "  Unique flights = " + uniqueCount);
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-            bRetVal = false;
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
             bRetVal = false;
         }
@@ -161,5 +163,6 @@ public class BaseData {
         return bRetVal;
     }
     
-
+    
+    
 }

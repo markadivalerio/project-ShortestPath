@@ -1,22 +1,12 @@
 package objs;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import util.BaseData;
-import util.Coordinate;
-import util.Haversine;
 
 public class ShortestPath implements SPAlgorithm
 {
 	protected String src, dest;
 	protected Graph graphObj;
 	protected Graph graph;
-	protected BaseData dataObj;
-	protected Map<String, Vertex> airports;
-	protected Set<Flight> flights;
 	
 	protected long time_ms;
     
@@ -25,59 +15,7 @@ public class ShortestPath implements SPAlgorithm
     	src = source;
     	dest = destination;
     	this.graph = graph;
-    	if(graph == null)
-    	{
-	    	graphObj = new Graph(false);
-	        dataObj = BaseData.getInstance();
-	        if(this.init())
-	        {
-	        	buildGraph();
-	        }
-    	}
     	time_ms = System.currentTimeMillis();
-    }
-
-    public boolean init() {
-        boolean bRetVal = false;
-        if (dataObj.initialize()) {
-            this.airports = dataObj.getAirports();
-            this.flights = dataObj.getFlights();
-            bRetVal = true;
-        } else {
-            bRetVal = false;
-        }
-        return bRetVal;
-    }
-
-    public boolean buildGraph() {
-
-        boolean bRetVal = false;
-
-        if (this.init()) {
-            Iterator<Flight> i = flights.iterator();
-            while (i.hasNext()) {
-                Flight currentFlight = i.next();
-                try {
-                    Vertex origin = airports.get(currentFlight.getOrigin());
-                    Vertex destination = airports.get(currentFlight.getDestination());
-                    if (origin != null && destination != null) {
-                        graphObj.addConnectedNodes(origin, destination, true); //undirected=true
-                    }
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    continue;
-                }
-            }
-            bRetVal = true;
-        }
-        return bRetVal;
-    }
-
-    public long calculateDistance(Vertex s, Vertex d){
-
-        Coordinate source = new Coordinate(s.getLongitude(), s.getLatitude());
-        Coordinate destination = new Coordinate(d.getLongitude(), d.getLatitude());
-        return Math.round(Haversine.haversine(source, destination));
     }
     
     public Route findShortestPath()
@@ -87,6 +25,7 @@ public class ShortestPath implements SPAlgorithm
     
     public Route findShortestPath(String source, String destination)
     {
+    	System.out.println("Not Implemented Yet\n");
     	return null;
     }
     
@@ -114,27 +53,15 @@ public class ShortestPath implements SPAlgorithm
     	str += "Shortest route:\n";
     	Vertex prev = null;
     	long totalDist = 0;
-        for(String code : shortestRoute.getAirports()){
-        	try
+        for(String code : shortestRoute.getAirports())
+        {
+    		str += graph.getVertex(code).toString();
+    		if(prev != null)
         	{
-        		str += airports.get(code).toString();
-        		if(prev != null)
-            	{
-            		totalDist += Edge.calculateDistance(airports.get(code), prev);
-            		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(airports.get(code), prev)+". Total Dist="+totalDist;
-            	}
-        		prev = airports.get(code);
+        		totalDist += Edge.calculateDistance(graph.getVertex(code), prev);
+        		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(graph.getVertex(code), prev)+". Total Dist="+totalDist;
         	}
-        	catch(NullPointerException e)
-        	{
-        		str += graph.getVertex(code).toString();
-        		if(prev != null)
-            	{
-            		totalDist += Edge.calculateDistance(graph.getVertex(code), prev);
-            		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(graph.getVertex(code), prev)+". Total Dist="+totalDist;
-            	}
-        		prev = graph.getVertex(code);
-        	}
+    		prev = graph.getVertex(code);
 
         	str += "\n";
         }

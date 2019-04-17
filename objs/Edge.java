@@ -76,8 +76,9 @@ public class Edge
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         if (this == o) return true;
-        Edge flight = (Edge) o;
-        return (weight == flight.weight && origin.equals(flight.origin) && destination.equals(flight.destination));
+        Edge e = (Edge) o;
+        return (this.getOrigin().equals(e.getOrigin()) && this.getDestination().equals(e.getDestination()) && this.getWeight() == e.getWeight());
+//        return (weight == flight.weight && origin.equals(flight.origin) && destination.equals(flight.destination));
     }
 
     @Override
