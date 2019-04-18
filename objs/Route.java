@@ -7,30 +7,40 @@ import java.util.Objects;
 public class Route {
 
     private long distance;
-    private List<String> airports;
+    private List<String> nodes;
+    public double f;
+    public double h;
 
     public Route(){
-        airports = new ArrayList<String>();
+    	nodes = new ArrayList<String>();
         this.distance = 0;
     }
     
     public Route(Vertex s, Vertex d)
     {
-    	airports = new ArrayList<String>();
-        airports.add(s.getName());
-        airports.add(d.getName());
-    	this.distance = Edge.calculateDistance(s, d);
+    	nodes = new ArrayList<String>();
+    	nodes.add(s.getName());
+    	nodes.add(d.getName());
+//    	this.distance = Edge.calculateDistance(s, d);
     }
 
     public Route(long distance, String s, String d){
         this.distance = distance;
-        airports = new ArrayList<String>();
-        airports.add(s);
-        airports.add(d);
+        nodes = new ArrayList<String>();
+        nodes.add(s);
+        nodes.add(d);
     }
     
-    public void addAirport(String code){
-        airports.add(code);
+    public Route(long distance, String s, String d, double f){
+        this.distance = distance;
+        nodes = new ArrayList<String>();
+        nodes.add(s);
+        nodes.add(d);
+        this.f = f;
+    }
+    
+    public void addNode(String code){
+    	nodes.add(code);
     }
 
     public long getDistance() {
@@ -41,17 +51,17 @@ public class Route {
         this.distance = distance;
     }
 
-    public List<String> getAirports(){
-        return this.airports;
+    public List<String> getNodes(){
+        return this.nodes;
     }
     
     public void setAirports(List<String> ports)
     {
-    	this.airports = ports;
+    	this.nodes = ports;
     }
 
     public String getYetToVisitAirport(){
-        return this.airports.get(airports.size()-1); // return the last item in the list which is not yet visited
+        return this.nodes.get(nodes.size()-1); // return the last item in the list which is not yet visited
     }
 
     @Override
@@ -61,7 +71,7 @@ public class Route {
         sb.append("Route{ ");
         sb.append("distance = " + distance);
         sb.append(", airports = [");
-        for(String s : airports){
+        for(String s : nodes){
             sb.append(s);
             sb.append(",");
         }
@@ -75,12 +85,12 @@ public class Route {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Route route = (Route) o;
-        return (this.airports.equals(route.airports) && this.distance ==route.distance);
+        return (nodes.equals(route.nodes) && this.distance ==route.distance);
     }
 
     @Override
     public int hashCode() {
         //return airports.hashCode();
-        return Objects.hash(this.distance,airports.hashCode());
+        return Objects.hash(this.distance, nodes.hashCode());
     }
 }

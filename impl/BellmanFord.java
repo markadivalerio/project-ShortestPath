@@ -51,7 +51,7 @@ public class BellmanFord extends ShortestPath
 
         		String nextVertexCode = nextVertex.getCode();
         		
-        		Long proposedVertexDistance = shortestDistTo.get(startCode) + e.getDistance();
+        		Long proposedVertexDistance = shortestDistTo.get(startCode) + e.getWeight();
 
 
         		if(proposedVertexDistance < shortestDistTo.get(nextVertexCode))

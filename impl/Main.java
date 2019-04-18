@@ -10,6 +10,7 @@ public class Main {
 //		String start_test = "SFO";
 //		String end_test = "CDG";
 		String start_test = "2";
+//		String end_test = "48";
 		String end_test = "188238";
 //		start_test = "HOU"; // not an international airport - guaranteed at least 3 airports.
 		Route shortestRoute;
@@ -22,5 +23,9 @@ public class Main {
 		BellmanFord bf = new BellmanFord(start_test, end_test, g);
 		shortestRoute = bf.findShortestPath();
 		System.out.println(bf.asString(shortestRoute));
+		
+		AStar as = new AStar(start_test, end_test, g);
+		shortestRoute = as.findShortestPath();
+		System.out.println(as.asString(shortestRoute));
 	}
 }

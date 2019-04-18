@@ -30,10 +30,11 @@ public class Dijkstra extends ShortestPath
         Vertex endVertex = graph.getVertex(destination);
 
         ArrayList<Vertex> neighbors = graph.getConnectedVertices(startVertex);
-
-        System.out.println(neighbors);
+        
         for (Vertex neighbor : neighbors) {
-        	long dist = Edge.calculateDistance(startVertex, neighbor);
+//        	long dist = Edge.calculateDistance(startVertex, neighbor);
+        	Edge e = graph.findEdge(startVertex, neighbor);
+        	long dist = e.getWeight();
             minHeap.add(new Route(dist, source, neighbor.getCode()));
         }
         visitedNodes.add(startVertex); // Add starting (source node) to the visited set
@@ -51,14 +52,21 @@ public class Dijkstra extends ShortestPath
             }
             List<Vertex> further_neighbors = graph.getConnectedVertices(neighbor);
             for(Vertex further_neighbor : further_neighbors) {
-                if(!visitedNodes.contains(further_neighbor)){
-                    long new_distance = shortestRoute.getDistance() + Edge.calculateDistance(neighbor, further_neighbor);
+                if(!visitedNodes.contains(further_neighbor))
+                {
+                	Edge e = graph.findEdge(startVertex, neighbor);
+                	if(e == null)
+                	{
+                		continue;
+                	}
+                	long new_distance = (long)(shortestRoute.getDistance() + e.getWeight());
+//                    long new_distance = shortestRoute.getDistance() + Edge.calculateDistance(neighbor, further_neighbor);
                     Route newRoute = new Route();
                     newRoute.setDistance(new_distance);
-                    for(int i=0; i< shortestRoute.getAirports().size();i++){
-                        newRoute.addAirport(shortestRoute.getAirports().get(i)); // keep adding the airports in the route e..g SFO -> AUS -> DFW
+                    for(int i=0; i< shortestRoute.getNodes().size();i++){
+                        newRoute.addNode(shortestRoute.getNodes().get(i)); // keep adding the airports in the route e..g SFO -> AUS -> DFW
                     }
-                    newRoute.addAirport(further_neighbor.getCode());
+                    newRoute.addNode(further_neighbor.getCode());
 
                     minHeap.add(newRoute);
                 }

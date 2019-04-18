@@ -11,9 +11,11 @@ public class Vertex{
     private String country;
     private double latitude;
     private double longitude;
-    private HashMap<String, Object> customAttr;
+//    private HashMap<String, Object> customAttr;
     public Vertex previousParent;
     public Vertex nextChild;
+    public Double f;
+    public Double g;
     
     public Vertex(String id)
     {
@@ -22,7 +24,7 @@ public class Vertex{
     	country = "";
         latitude = 0;
         longitude = 0;
-        customAttr = new HashMap<String, Object>();
+//        customAttr = new HashMap<String, Object>();
         previousParent = null;
         nextChild = null;
     }
@@ -33,7 +35,7 @@ public class Vertex{
         this.country = country;
         this.latitude = latitude;
         this.longitude = longitude;
-        customAttr = new HashMap<String, Object>();
+//        customAttr = new HashMap<String, Object>();
         previousParent = null;
         nextChild = null;
     }
@@ -58,35 +60,35 @@ public class Vertex{
         return longitude;
     }
     
-    public Object get(String attrKey)
-    {
-    	return customAttr.getOrDefault(attrKey, null);
-    }
+//    public Object get(String attrKey)
+//    {
+//    	return customAttr.getOrDefault(attrKey, null);
+//    }
+//    
+//    public Object get(String attrKey, Object defaultValue)
+//    {
+//    	return customAttr.getOrDefault(attrKey, defaultValue);
+//    }
+//    
+//    public void set(String attrKey, Object attrValue)
+//    {
+//    	customAttr.put(attrKey, attrValue);
+//    }
+//    
+//    public int attrSize()
+//    {
+//    	return customAttr.size();
+//    }
+//    
+//    public Set<String> attrKeys()
+//    {
+//    	return customAttr.keySet();
+//    }
     
-    public Object get(String attrKey, Object defaultValue)
-    {
-    	return customAttr.getOrDefault(attrKey, defaultValue);
-    }
-    
-    public void set(String attrKey, Object attrValue)
-    {
-    	customAttr.put(attrKey, attrValue);
-    }
-    
-    public int attrSize()
-    {
-    	return customAttr.size();
-    }
-    
-    public Set<String> attrKeys()
-    {
-    	return customAttr.keySet();
-    }
-    
-    public long getDistanceTo(Vertex x)
-    {
-    	return Edge.calculateDistance(this, x);
-    }
+//    public long getDistanceTo(Vertex x)
+//    {
+//    	return Edge.calculateDistance(this, x);
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -104,15 +106,15 @@ public class Vertex{
                 name.equals(node.name) &&
                 country.equals(node.country))
         {
-        	if(!customAttr.keySet().equals(node.attrKeys()))
-        		return false;
-            for(String attrKey: customAttr.keySet())
-            {
-            	if(!customAttr.get(attrKey).equals(node.get(attrKey)))
-            	{
-            		return false;
-            	}
-            }
+//        	if(!customAttr.keySet().equals(node.attrKeys()))
+//        		return false;
+//            for(String attrKey: customAttr.keySet())
+//            {
+//            	if(!customAttr.get(attrKey).equals(node.get(attrKey)))
+//            	{
+//            		return false;
+//            	}
+//            }
             return true;
         }
 

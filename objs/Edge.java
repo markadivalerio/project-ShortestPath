@@ -10,7 +10,7 @@ public class Edge
 	private Vertex origin, destination;
 	private String index;
 	private int weight;
-	private Long distance;
+//	private Long distance;
 	
 	public Edge()
 	{
@@ -18,24 +18,24 @@ public class Edge
 		this.origin = null;
         this.destination = null;
         this.weight = 0;
-        this.distance = 0L;
+//        this.distance = 0L;
 	}
 
-    public Edge(Vertex origin, Vertex destination, int nstops)
+    public Edge(Vertex origin, Vertex destination, int weight)
     {
         this.origin = origin;
         this.destination = destination;
-        this.index = Edge.indexOf(origin, destination);
-        this.weight = nstops;
-        this.distance = Edge.calculateDistance(origin, destination);
+        this.index = Edge.generateEIndex(origin, destination);
+        this.weight = weight;
+//        this.distance = Edge.calculateDistance(origin, destination);
     }
     
-    public static String indexOf(Vertex u, Vertex v)
+    public static String generateEIndex(Vertex u, Vertex v)
     {
-    	return Edge.indexOf(u.getCode(), v.getCode());
+    	return Edge.generateEIndex(u.getCode(), v.getCode());
     }
     
-    public static String indexOf(String u, String v)
+    public static String generateEIndex(String u, String v)
     {
     	return u + "-" + v;
     }
@@ -60,17 +60,17 @@ public class Edge
         return weight;
     }
     
-    public Long getDistance()
-    {
-    	return distance;
-    }
+//    public Long getDistance()
+//    {
+//    	return distance;
+//    }
     
-    public static long calculateDistance(Vertex src, Vertex dest)
-    {
-    	Coordinate s = new Coordinate(src.getLongitude(), src.getLatitude());
-        Coordinate d = new Coordinate(dest.getLongitude(), dest.getLatitude());
-        return Math.round(Haversine.haversine(s, d));
-    }
+//    public static long calculateDistance(Vertex src, Vertex dest)
+//    {
+//    	Coordinate s = new Coordinate(src.getLongitude(), src.getLatitude());
+//        Coordinate d = new Coordinate(dest.getLongitude(), dest.getLatitude());
+//        return Math.round(Haversine.haversine(s, d));
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -85,8 +85,8 @@ public class Edge
     public String toString() {
         return "origin=" + origin +
                 ", destination=" + destination +
-                ", nstops(weight)=" + weight +
-                ", distance=" + distance;
+                ", weight=" + weight;
+//                ", distance=" + distance;
     }
 
     @Override

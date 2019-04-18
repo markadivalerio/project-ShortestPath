@@ -2,7 +2,6 @@ package objs;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,7 @@ public class Graph
 
 	private Map<String, Vertex> vertices; // all (even unconnected)
 	private Map<String, Edge> edges;
-	private Map<Vertex, List<Vertex>> adjVertices;
+//	private Map<Vertex, List<Vertex>> adjVertices;
 	private Map<String, ArrayList<Vertex>> connectedVertices;
 	private Map<String, ArrayList<Edge>> vertexEdges;
 
@@ -30,7 +29,7 @@ public class Graph
 	{
 		vertices = new HashMap<String, Vertex>();
 		edges = new HashMap<String, Edge>();
-		adjVertices = new HashMap<Vertex, List<Vertex>>();
+//		adjVertices = new HashMap<Vertex, List<Vertex>>();
 		connectedVertices = new HashMap<String, ArrayList<Vertex>>();
 		vertexEdges = new HashMap<String, ArrayList<Edge>>();
 		if(loadBaseData)
@@ -41,10 +40,10 @@ public class Graph
 		}
 	}
 
-	public Set<Vertex> getVertices()
-	{
-		return adjVertices.keySet();
-	}
+//	public Set<Vertex> getVertices()
+//	{
+//		return adjVertices.keySet();
+//	}
 	
 	public Set<String> getRealVertices()
 	{
@@ -56,40 +55,40 @@ public class Graph
 		return vertices.get(code);
 	}
 
-	public int size()
-	{
-		return adjVertices.size();
-	}
-
-	public void connectVertices(Vertex u, Vertex v, boolean undirected)
-	{
-		addEdge(u, v);
-		if (undirected)
-			addEdge(v, u);
-	}
-
-	public void addConnectedNodes(Vertex u, Vertex v, boolean undirected)
-	{
-		addVertex(u);
-		addVertex(v);
-		connectVertices(u, v, undirected);
-	}
-
-	public void addVertex(Vertex v)
-	{
-		if(!adjVertices.containsKey(v))
-		{
-			adjVertices.putIfAbsent(v, new ArrayList<Vertex>());
-		}
-	}
-
-	public void addEdge(Vertex v, Vertex w)
-	{
-		if(!adjVertices.get(v).contains(w))
-		{
-			adjVertices.get(v).add(w);
-		}
-	}
+//	public int size()
+//	{
+//		return adjVertices.size();
+//	}
+//
+//	public void connectVertices(Vertex u, Vertex v, boolean undirected)
+//	{
+//		addEdge(u, v);
+//		if (undirected)
+//			addEdge(v, u);
+//	}
+//
+//	public void addConnectedNodes(Vertex u, Vertex v, boolean undirected)
+//	{
+//		addVertex(u);
+//		addVertex(v);
+//		connectVertices(u, v, undirected);
+//	}
+//
+//	public void addVertex(Vertex v)
+//	{
+//		if(!adjVertices.containsKey(v))
+//		{
+//			adjVertices.putIfAbsent(v, new ArrayList<Vertex>());
+//		}
+//	}
+//
+//	public void addEdge(Vertex v, Vertex w)
+//	{
+//		if(!adjVertices.get(v).contains(w))
+//		{
+//			adjVertices.get(v).add(w);
+//		}
+//	}
 
 	public void addEdge(Edge e, boolean undirected)
 	{
@@ -131,17 +130,21 @@ public class Graph
 		}
 	}
 	
+	public Edge getEdgeFromECode(String edgeCode)
+	{
+		return edges.get(edgeCode);
+	}
+	
 	public Edge getRealEdge(String u, String v)
 	{
-		String eIndex = Edge.indexOf(u, v);
+		String eIndex = Edge.generateEIndex(u, v);
 		return edges.get(eIndex);
 	}
 	
-	public Edge getRealEdge(Vertex u, Vertex v)
+	public Edge findEdge(Vertex u, Vertex v)
 	{
-		String eIndex = Edge.indexOf(u, v);
+		String eIndex = Edge.generateEIndex(u, v);
 		return edges.get(eIndex);
-			
 	}
 	
 	public ArrayList<Vertex> getConnectedVertices(Vertex u)
@@ -169,23 +172,20 @@ public class Graph
 		return outbound;
 	}
 	
-	public Edge getRealEdge(String edgeCode)
-	{
-		return edges.get(edgeCode);
-	}
+	
 	public Set<String> getEdges()
 	{
 		return edges.keySet();
 	}
 
-	public List<Vertex> getEdges(Vertex v)
-	{
-		if (!this.adjVertices.containsKey(v))
-		{
-			return new ArrayList<Vertex>();
-		}
-		return adjVertices.get(v);
-	}
+//	public List<Vertex> getEdges(Vertex v)
+//	{
+//		if (!this.adjVertices.containsKey(v))
+//		{
+//			return new ArrayList<Vertex>();
+//		}
+//		return adjVertices.get(v);
+//	}
 
 	public void buildFromBaseData(Boolean undirectedEdges)
 	{
@@ -229,29 +229,29 @@ public class Graph
     	}
     }
 
-	@Override
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("Graph {\n");
-		sb.append("size = " + this.size() + " \n");
-		for (Vertex key : adjVertices.keySet())
-		{
-			sb.append(key.getCode());
-			sb.append(" -> ");
-			sb.append("[");
-			for (Vertex edge : adjVertices.get(key))
-			{
-				sb.append(edge.getCode() + ",");
-			}
-			if (sb.lastIndexOf(",") != -1)
-			{
-				sb.deleteCharAt(sb.lastIndexOf(","));
-			}
-			sb.append("]\n");
-		}
-		sb.append("}");
-
-		return sb.toString();
-	}
+//	@Override
+//	public String toString()
+//	{
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("Graph {\n");
+//		sb.append("size = " + this.size() + " \n");
+//		for (Vertex key : adjVertices.keySet())
+//		{
+//			sb.append(key.getCode());
+//			sb.append(" -> ");
+//			sb.append("[");
+//			for (Vertex edge : adjVertices.get(key))
+//			{
+//				sb.append(edge.getCode() + ",");
+//			}
+//			if (sb.lastIndexOf(",") != -1)
+//			{
+//				sb.deleteCharAt(sb.lastIndexOf(","));
+//			}
+//			sb.append("]\n");
+//		}
+//		sb.append("}");
+//
+//		return sb.toString();
+//	}
 }
