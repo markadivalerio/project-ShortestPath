@@ -7,14 +7,14 @@ public class ShortestPath implements SPAlgorithm
 	protected String start, finish;
 	protected Graph graph;
 	
-	protected long time_ms;
+	protected long time_ns;
     
     public ShortestPath(String source, String destination, Graph graph)
     {
     	start = source;
     	finish = destination;
     	this.graph = graph;
-    	time_ms = System.currentTimeMillis();
+    	time_ns = System.nanoTime();
     }
     
     public Route findShortestPath()
@@ -30,29 +30,30 @@ public class ShortestPath implements SPAlgorithm
     
     public void startTimer()
     {
-    	time_ms = System.currentTimeMillis();
-    }
-    public void stopTimer()
-    {
-    	time_ms = System.currentTimeMillis() - time_ms;
+    	time_ns = System.nanoTime();
     }
 
-    public long getTimeMS()
+    public void stopTimer()
     {
-    	return time_ms;
+    	time_ns = System.nanoTime() - time_ns;
     }
     
     public String asString(Route shortestRoute)
     {
+    	String str = "Time (nanoseconds): "+time_ns+"\n";
     	if(shortestRoute == null || shortestRoute.getNodes() == null || shortestRoute.getNodes().size() == 0)
-    		return "No route found.\n";
+    	{
+    		str += "No route found.\n";
+    		return str;
+    	}
 
-    	List<String> ports = shortestRoute.getNodes();
-    	String str = "Distance between " + ports.get(0) + " and " + ports.get(ports.size() - 1) + " = " + shortestRoute.getDistance() + " miles\n";
+    	List<String> nodes = shortestRoute.getNodes();
+//    	str += "Distance between " + ports.get(0) + " and " + ports.get(ports.size() - 1) + " = " + shortestRoute.getDistance() + " miles\n";
+
+    	str += "Distance between " + nodes.get(0) + " and " + nodes.get(nodes.size() - 1) + " = " + shortestRoute.getDistance() + " ("+nodes.size() + " nodes)\n";
     	str += "Shortest route:\n";
     	Vertex prev = null;
-    	long totalDist = 0;
-        for(String code : shortestRoute.getNodes())
+        for(String code : nodes)
         {
     		str += graph.getVertex(code).toString();
     		if(prev != null)

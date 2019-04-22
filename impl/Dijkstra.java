@@ -31,7 +31,8 @@ public class Dijkstra extends ShortestPath
 
         ArrayList<Vertex> neighbors = graph.getConnectedVertices(startVertex);
         
-        for (Vertex neighbor : neighbors) {
+        for (Vertex neighbor : neighbors)
+        {
 //        	long dist = Edge.calculateDistance(startVertex, neighbor);
         	Edge e = graph.findEdge(startVertex, neighbor);
         	long dist = e.getWeight();
@@ -41,7 +42,7 @@ public class Dijkstra extends ShortestPath
 
         while(!minHeap.isEmpty()){
             Route shortestRoute = minHeap.poll();
-            Vertex neighbor = graph.getVertex(shortestRoute.getYetToVisitAirport());
+            Vertex neighbor = graph.getVertex(shortestRoute.getLastItem());
 
             if (visitedNodes.contains(neighbor)){
                 continue;

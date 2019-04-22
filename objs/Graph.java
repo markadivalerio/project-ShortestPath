@@ -3,7 +3,6 @@ package objs;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -16,34 +15,38 @@ public class Graph
 
 	private Map<String, Vertex> vertices; // all (even unconnected)
 	private Map<String, Edge> edges;
-//	private Map<Vertex, List<Vertex>> adjVertices;
 	private Map<String, ArrayList<Vertex>> connectedVertices;
 	private Map<String, ArrayList<Edge>> vertexEdges;
+	private final String DATA_FILE_PATH = "project-ShortestPath/data/USA-road-";
+	
 
 	public Graph()
 	{
-		this(true);
+		this("NY");
 	}
 
-	public Graph(boolean loadBaseData)
+	public Graph(String area)
 	{
 		vertices = new HashMap<String, Vertex>();
 		edges = new HashMap<String, Edge>();
 //		adjVertices = new HashMap<Vertex, List<Vertex>>();
 		connectedVertices = new HashMap<String, ArrayList<Vertex>>();
 		vertexEdges = new HashMap<String, ArrayList<Edge>>();
-		if(loadBaseData)
+		if(area != null && area.length() > 0)
 		{
+			if(area == "AIRPORTS_FLIGHTS")
+			{
+				// TODO
+			}
+			else
+			{
 //			buildFromBaseData(true);
-			loadFile("project-ShortestPath/data/USA-road-d.NY.gr");
-			System.out.println(edges.size());
+			//loadFile("project-ShortestPath/data/USA-road-d.NY.gr");
+				loadFiles(area);
+				System.out.println("Vertices = " + vertices.size() + ".   Edges = "+edges.size());
+			}
 		}
 	}
-
-//	public Set<Vertex> getVertices()
-//	{
-//		return adjVertices.keySet();
-//	}
 	
 	public Set<String> getRealVertices()
 	{
@@ -54,41 +57,6 @@ public class Graph
 	{
 		return vertices.get(code);
 	}
-
-//	public int size()
-//	{
-//		return adjVertices.size();
-//	}
-//
-//	public void connectVertices(Vertex u, Vertex v, boolean undirected)
-//	{
-//		addEdge(u, v);
-//		if (undirected)
-//			addEdge(v, u);
-//	}
-//
-//	public void addConnectedNodes(Vertex u, Vertex v, boolean undirected)
-//	{
-//		addVertex(u);
-//		addVertex(v);
-//		connectVertices(u, v, undirected);
-//	}
-//
-//	public void addVertex(Vertex v)
-//	{
-//		if(!adjVertices.containsKey(v))
-//		{
-//			adjVertices.putIfAbsent(v, new ArrayList<Vertex>());
-//		}
-//	}
-//
-//	public void addEdge(Vertex v, Vertex w)
-//	{
-//		if(!adjVertices.get(v).contains(w))
-//		{
-//			adjVertices.get(v).add(w);
-//		}
-//	}
 
 	public void addEdge(Edge e, boolean undirected)
 	{
@@ -149,7 +117,7 @@ public class Graph
 	
 	public ArrayList<Vertex> getConnectedVertices(Vertex u)
 	{
-		return connectedVertices.getOrDefault(u.getCode(), new ArrayList<Vertex>());
+		return connectedVertices.getOrDefault(u, new ArrayList<Vertex>());
 	}
 	
 	public ArrayList<Edge> getConnectedEdges(String u)
@@ -178,15 +146,6 @@ public class Graph
 		return edges.keySet();
 	}
 
-//	public List<Vertex> getEdges(Vertex v)
-//	{
-//		if (!this.adjVertices.containsKey(v))
-//		{
-//			return new ArrayList<Vertex>();
-//		}
-//		return adjVertices.get(v);
-//	}
-
 	public void buildFromBaseData(Boolean undirectedEdges)
 	{
 		BaseData bdata = BaseData.getInstance();
@@ -202,11 +161,18 @@ public class Graph
 
 	}
 	
-	public void loadFile(String filepath)
+	public void loadFiles(String abbreviation)
     {
+		String distFile = DATA_FILE_PATH + "d." + abbreviation + ".gr";
+
+//		@SuppressWarnings("unused")
+//		String timeFile = DATA_FILE_PATH + "t." + abbreviation + ".gr";
+//
+//		@SuppressWarnings("unused")
+//		String coordFile = DATA_FILE_PATH + "d." + abbreviation + ".co";
     	try
     	{
-    		File file = new File(filepath);
+    		File file = new File(distFile);
     		Scanner inputStream = new Scanner(file);
             inputStream.useDelimiter("\n");
             while(inputStream.hasNext())

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import objs.Edge;
 import objs.Graph;
-import objs.MinHeap;
 import objs.Route;
 import objs.ShortestPath;
 import objs.Vertex;
@@ -149,44 +148,58 @@ public class AStar extends ShortestPath
 	public Route findShortestPath(String source, String destination)
 	{
         Route resultRoute = null;
-       // MinHeap minHeap = new MinHeap();
+//        MinHeap minHeap = new MinHeap();
         List<Route> minHeap = new ArrayList<Route>();
         Set<Vertex> visitedNodes = new HashSet<Vertex>();
-        Set<Route> travelPath = new HashSet<Route>();
+//        Set<Route> travelPath = new HashSet<Route>();
         Vertex startVertex = graph.getVertex(source);
         Vertex endVertex = graph.getVertex(destination);
         long distance = 0;
 
         List<Edge> edges = graph.getOutboundConnectedEdges(startVertex);
-        for (Edge e: edges)
+        for(Edge e: edges)
         {
             distance = e.getWeight();
             Edge nextEdge = graph.findEdge(e.getDestination(), endVertex);
             if(nextEdge != null)
             {
-            	double distanceDestination = nextEdge.getWeight();            
-            	minHeap.add(new Route(distance, source, e.getDestination().getCode(), distanceDestination));
+            	minHeap.add(new Route(e.getWeight(), e.getOrigin().getCode(), e.getDestination().getCode(), (nextEdge.getWeight()*2)));
+            	
+            }
+            else
+            {
+            	minHeap.add(new Route(distance, e.getOrigin().getCode(), e.getDestination().getCode(), (distance*2)));
             }
         }
         visitedNodes.add(startVertex); // Add starting (source node) to the visited set
-
+        System.out.println(minHeap.toString());
+        
+        
         while(!minHeap.isEmpty())
         {
+        	System.out.println("MinHeap Size:" + minHeap.size());
            // Route shortestRoute = minHeap.poll();
         	Route shortestRoute = GetLowestFFromHeap(minHeap);
-            Vertex neighbor = graph.getVertex(shortestRoute.getYetToVisitAirport());
+        	System.out.println("ShortestRoute: " + shortestRoute);
+        	Vertex neighbor = graph.getVertex(shortestRoute.getLastItem());
+        	System.out.println("neighbor "+neighbor);
            //  minHeap.remove(shortestRoute);
             minHeap.clear();
+            System.out.println("Visited: " + visitedNodes);
             if(visitedNodes.contains(neighbor))
             {
             	if(minHeap.isEmpty())
                 {
                 	shortestRoute.getNodes().remove(shortestRoute.getNodes().size()-1);
-                	visitedNodes.remove( graph.getVertex(shortestRoute.getNodes().get(shortestRoute.getNodes().size()-1)));
+
+                	Vertex removed = graph.getVertex(shortestRoute.getNodes().get(shortestRoute.size()-1));
+                	System.out.println("RemovedA: "+removed);
+                	visitedNodes.remove(removed);
                 	minHeap.add(shortestRoute);
                 }
             	continue;
             }
+            System.out.println("Neighbor: " + neighbor);
             if(neighbor.equals(endVertex))
             { // destination has been reached
                 resultRoute = shortestRoute;
@@ -198,18 +211,17 @@ public class AStar extends ShortestPath
                 if(!visitedNodes.contains(further_neighbor)){
 
                     long new_distance = shortestRoute.getDistance() + further_edge.getWeight();
-                    Route newRoute = new Route();
                     Edge finalEdge = graph.findEdge(further_neighbor, endVertex);
                     if(finalEdge != null)
                     {
+                    	Route newRoute = new Route();
                     	newRoute.f = new_distance + finalEdge.getWeight(); 
 	                    newRoute.setDistance(new_distance);
-	                    for(int i=0; i< shortestRoute.getNodes().size();i++){
+	                    for(int i=0; i< shortestRoute.size();i++){
 	                        newRoute.addNode(shortestRoute.getNodes().get(i)); // keep adding the airports in the route e..g SFO -> AUS -> DFW
 	                    }
 	                    newRoute.addNode(further_neighbor.getCode());
 	                    
-
 	                    minHeap.add(newRoute);
                     }
                 }
@@ -217,11 +229,10 @@ public class AStar extends ShortestPath
             visitedNodes.add(neighbor); // Add to visited node to the set
             if(minHeap.isEmpty())
             {
-            	shortestRoute.getNodes().remove(shortestRoute.getNodes().size()-1);
-            	
-            	visitedNodes.remove( graph.getVertex(shortestRoute.getNodes().get(shortestRoute.getNodes().size()-1)));
+            	shortestRoute.getNodes().remove(shortestRoute.size()-1);
+//            	visitedNodes.add(graph.getVertex(removed));
+            	visitedNodes.remove( graph.getVertex(shortestRoute.getNodes().get(shortestRoute.size()-1)));
             	minHeap.add(shortestRoute);
-            
             }
         }
         

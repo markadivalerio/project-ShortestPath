@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Route {
 
     private long distance;
-    private List<String> nodes;
+    private ArrayList<String> nodes;
     public double f;
     public double h;
 
@@ -55,12 +55,18 @@ public class Route {
         return this.nodes;
     }
     
-    public void setAirports(List<String> ports)
+    public int size()
+    {
+    	return this.nodes.size();
+    }
+    
+    public void setAirports(ArrayList<String> ports)
     {
     	this.nodes = ports;
     }
 
-    public String getYetToVisitAirport(){
+    public String getLastItem()
+    {
         return this.nodes.get(nodes.size()-1); // return the last item in the list which is not yet visited
     }
 
