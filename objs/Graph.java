@@ -117,7 +117,7 @@ public class Graph
 	
 	public ArrayList<Vertex> getConnectedVertices(Vertex u)
 	{
-		return connectedVertices.getOrDefault(u, new ArrayList<Vertex>());
+		return connectedVertices.getOrDefault(u.getCode(), new ArrayList<Vertex>());
 	}
 	
 	public ArrayList<Edge> getConnectedEdges(String u)
@@ -163,6 +163,7 @@ public class Graph
 	
 	public void loadFiles(String abbreviation)
     {
+    	// uncomment this
 		String distFile = DATA_FILE_PATH + "d." + abbreviation + ".gr";
 
 //		@SuppressWarnings("unused")
@@ -170,6 +171,12 @@ public class Graph
 //
 //		@SuppressWarnings("unused")
 //		String coordFile = DATA_FILE_PATH + "d." + abbreviation + ".co";
+
+		// comment this when needed
+		//String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Project/Data/USA-road-d.E.gr";
+//		String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Project/project-ShortestPath-refactor-OLD/data/USA-road-d.NY.gr";
+		//String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Practice/src/com/ut/practice/datastructure/USA-road-d.NY-small.gr";
+
     	try
     	{
     		File file = new File(distFile);
@@ -200,13 +207,13 @@ public class Graph
 //	{
 //		StringBuilder sb = new StringBuilder();
 //		sb.append("Graph {\n");
-//		sb.append("size = " + this.size() + " \n");
-//		for (Vertex key : adjVertices.keySet())
+//		sb.append("size = " + vertices.size() + " \n");
+//		for (String key : edges.keySet())
 //		{
-//			sb.append(key.getCode());
+//			sb.append(key);
 //			sb.append(" -> ");
 //			sb.append("[");
-//			for (Vertex edge : adjVertices.get(key))
+//			for (Edge edge : edges.get(key))
 //			{
 //				sb.append(edge.getCode() + ",");
 //			}
@@ -219,5 +226,30 @@ public class Graph
 //		sb.append("}");
 //
 //		return sb.toString();
+//
+//		private Map<String, Vertex> vertices; // all (even unconnected)
+//		private Map<String, Edge> edges;
 //	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Graph{Size: ");
+		sb.append(vertices.size());
+		sb.append("\nVertices \n");
+
+		for (String v : vertices.keySet()) {
+			sb.append(vertices.get(v).toString() + "\n");
+		}
+
+		sb.append("\nEdges \n");
+
+		for (String e : edges.keySet()) {
+			sb.append(edges.get(e).toString() + "\n");
+		}
+		return sb.toString();
+	}
+
 }

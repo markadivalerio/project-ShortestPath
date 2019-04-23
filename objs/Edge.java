@@ -2,6 +2,9 @@ package objs;
 
 import java.util.Objects;
 
+import util.Coordinate;
+import util.Haversine;
+
 //import util.Coordinate;
 //import util.Haversine;
 
@@ -10,7 +13,7 @@ public class Edge
 	private Vertex origin, destination;
 	private String index;
 	private int weight;
-//	private Long distance;
+	private Long distance;
 	
 	public Edge()
 	{
@@ -27,7 +30,14 @@ public class Edge
         this.destination = destination;
         this.index = Edge.generateEIndex(origin, destination);
         this.weight = weight;
-//        this.distance = Edge.calculateDistance(origin, destination);
+        if(origin.latitude > 0 && origin.longitude != 0 && destination.latitude != 0 && destination.longitude != 0)
+        {
+        	this.distance = Edge.calculateDistance(origin, destination);
+        }
+        else
+        {
+        	this.distance = 0L;
+        }
     }
     
     public static String generateEIndex(Vertex u, Vertex v)
@@ -60,17 +70,17 @@ public class Edge
         return weight;
     }
     
-//    public Long getDistance()
-//    {
-//    	return distance;
-//    }
+    public Long getDistance()
+    {
+    	return distance;
+    }
     
-//    public static long calculateDistance(Vertex src, Vertex dest)
-//    {
-//    	Coordinate s = new Coordinate(src.getLongitude(), src.getLatitude());
-//        Coordinate d = new Coordinate(dest.getLongitude(), dest.getLatitude());
-//        return Math.round(Haversine.haversine(s, d));
-//    }
+    public static long calculateDistance(Vertex src, Vertex dest)
+    {
+    	Coordinate s = new Coordinate(src.getLongitude(), src.getLatitude());
+        Coordinate d = new Coordinate(dest.getLongitude(), dest.getLatitude());
+        return Math.round(Haversine.haversine(s, d));
+    }
 
     @Override
     public boolean equals(Object o) {

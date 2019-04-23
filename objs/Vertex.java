@@ -7,8 +7,8 @@ public class Vertex{
     private String code;
     private String name;
     private String country;
-    private double latitude;
-    private double longitude;
+    public double latitude;
+    public double longitude;
 //    private HashMap<String, Object> customAttr;
     public Vertex previousParent;
     public Vertex nextChild;
