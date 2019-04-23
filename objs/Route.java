@@ -76,7 +76,7 @@ public class Route {
         StringBuilder sb = new StringBuilder();
         sb.append("Route{ ");
         sb.append("distance = " + distance);
-        sb.append(", airports = [");
+        sb.append(", nodes = [");
         for(String s : nodes){
             sb.append(s);
             sb.append(",");
