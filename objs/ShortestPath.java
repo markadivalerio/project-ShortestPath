@@ -1,6 +1,7 @@
 package objs;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ShortestPath implements SPAlgorithm
 {
@@ -40,32 +41,54 @@ public class ShortestPath implements SPAlgorithm
     
     public String asString(Route shortestRoute)
     {
-    	String str = "Time (nanoseconds): "+time_ns+"\n";
-    	if(shortestRoute == null || shortestRoute.getNodes() == null || shortestRoute.getNodes().size() == 0)
-    	{
-    		str += "No route found.\n";
-    		return str;
-    	}
+		return this.asString(shortestRoute, false).toString();
+    }
+	public String asString(Route shortestRoute, boolean printOnlyVertexID)
+	{
 
-    	List<String> nodes = shortestRoute.getNodes();
+		StringBuilder sb = new StringBuilder();
+		sb.append("Time (nano seconds): "+time_ns+"\n");
+		sb.append("Time (micro seconds): " + TimeUnit.MICROSECONDS.convert(time_ns, TimeUnit.NANOSECONDS)+"\n");
+		sb.append("Time (milli seconds): " + TimeUnit.MILLISECONDS.convert(time_ns, TimeUnit.NANOSECONDS)+"\n");
+		sb.append("Time (seconds): " + TimeUnit.SECONDS.convert(time_ns,TimeUnit.NANOSECONDS)+"\n");
+		sb.append("Time (minutes): " + TimeUnit.MINUTES.convert(time_ns,TimeUnit.NANOSECONDS)+"\n");
+
+		if(shortestRoute == null || shortestRoute.getNodes() == null || shortestRoute.getNodes().size() == 0)
+		{
+			sb.append("No route found.\n");
+			return sb.toString();
+		}
+
+		List<String> nodes = shortestRoute.getNodes();
 //    	str += "Distance between " + ports.get(0) + " and " + ports.get(ports.size() - 1) + " = " + shortestRoute.getDistance() + " miles\n";
 
-    	str += "Distance between " + nodes.get(0) + " and " + nodes.get(nodes.size() - 1) + " = " + shortestRoute.getDistance() + " ("+nodes.size() + " nodes)\n";
-    	str += "Shortest route:\n";
-    	Vertex prev = null;
-        for(String code : nodes)
-        {
-    		str += graph.getVertex(code).toString();
-    		if(prev != null)
-        	{
+		sb.append("Distance between " + nodes.get(0) + " and " + nodes.get(nodes.size() - 1) + " = " + shortestRoute.getDistance() + " ("+nodes.size() + " nodes)\n");
+		if(printOnlyVertexID) {
+			sb.append("Shortest route: {");
+		}else{
+			sb.append("Shortest route: \n");
+		}
+		Vertex prev = null;
+		for(String code : nodes)
+		{
+			if(printOnlyVertexID == true) { // Do not print the vertices info if not requested to avoid verbose output on the console
+				sb.append(graph.getVertex(code).getCode() + ",");
+			} else{
+				sb.append(graph.getVertex(code).toString() + "\n");
+			}
+
+			//if(prev != null)
+			//{
 //        		totalDist += Edge.calculateDistance(graph.getVertex(code), prev);
 //        		str += "\n"+prev.getCode() + " -> " + code + " = " + Edge.calculateDistance(graph.getVertex(code), prev)+". Total Dist="+totalDist;
-        	}
-    		prev = graph.getVertex(code);
-
-        	str += "\n";
-        }
-        str += "\n";
-        return str;
-    }
+			//}
+			//prev = graph.getVertex(code);
+		}
+		if(printOnlyVertexID){
+			sb.setLength(sb.length() - 1); // remove the trailing comma and add }
+			sb.append("}");
+		}
+		//str += "\n";
+		return sb.toString();
+	}
 }

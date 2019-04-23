@@ -18,7 +18,15 @@ public class Graph
 	private Map<String, ArrayList<Vertex>> connectedVertices;
 	private Map<String, ArrayList<Edge>> vertexEdges;
 	private final String DATA_FILE_PATH = "project-ShortestPath/data/USA-road-";
-	
+	private String abbreviation;
+
+	public void setDatafile(String datafile) {
+		this.datafile = datafile;
+	}
+
+	private String datafile;
+
+
 
 	public Graph()
 	{
@@ -42,8 +50,7 @@ public class Graph
 			{
 //			buildFromBaseData(true);
 			//loadFile("project-ShortestPath/data/USA-road-d.NY.gr");
-				loadFiles(area);
-				System.out.println("Vertices = " + vertices.size() + ".   Edges = "+edges.size());
+				abbreviation = area;
 			}
 		}
 	}
@@ -161,11 +168,18 @@ public class Graph
 
 	}
 	
-	public void loadFiles(String abbreviation)
+	//public void loadFiles(String abbreviation)
+	public void loadFiles()
     {
     	// uncomment this
-		String distFile = DATA_FILE_PATH + "d." + abbreviation + ".gr";
+		String distFile;
 
+		if("".equals(datafile)){
+			distFile = DATA_FILE_PATH + "d." + this.abbreviation + ".gr";
+		}
+		else {
+			distFile = datafile;
+		}
 //		@SuppressWarnings("unused")
 //		String timeFile = DATA_FILE_PATH + "t." + abbreviation + ".gr";
 //
@@ -175,6 +189,7 @@ public class Graph
 		// comment this when needed
 		//String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Project/Data/USA-road-d.E.gr";
 //		String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Project/project-ShortestPath-refactor-OLD/data/USA-road-d.NY.gr";
+		//String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Project/project-ShortestPath-refactor-OLD/data/USA-road-d.NY.gr";
 		//String distFile = "/raj/UT-Masters/Spring2019/Algorithms/Practice/src/com/ut/practice/datastructure/USA-road-d.NY-small.gr";
 
     	try
@@ -195,6 +210,7 @@ public class Graph
             }
             
             inputStream.close();
+			System.out.println("Vertices = " + vertices.size() + ".   Edges = "+edges.size());
     	}
     	catch(Exception e)
     	{
