@@ -2,7 +2,9 @@ package objs;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -17,7 +19,9 @@ public class Graph
 	private Map<String, Edge> edges;
 	private Map<String, ArrayList<Vertex>> connectedVertices;
 	private Map<String, ArrayList<Edge>> vertexEdges;
-	private final String DATA_FILE_PATH = "project-ShortestPath/data/USA-road-";
+	private final String DATA_FILE_PATH = "project-ShortestPath/data/";
+	private final String FLIGHTS_FILENAME = "flights.dat";
+	private final String AIRPORTS_FILENAME = "airports.dat";
 	private String abbreviation;
 
 	public void setDatafile(String datafile) {
@@ -174,8 +178,13 @@ public class Graph
     	// uncomment this
 		String distFile;
 
-		if("".equals(datafile)){
-			distFile = DATA_FILE_PATH + "d." + this.abbreviation + ".gr";
+		if(datafile == null || "".equals(datafile)){
+			distFile = DATA_FILE_PATH + "USA-road-d." + this.abbreviation + ".gr";
+		}
+		else if(datafile.toLowerCase().contains("airport") || datafile.toLowerCase().contains("flight"))
+		{
+			loadAirportsAndFlights();
+			return;
 		}
 		else {
 			distFile = datafile;
@@ -217,6 +226,78 @@ public class Graph
     		e.printStackTrace();
     	}
     }
+	
+	public void loadAirportsAndFlights()
+	{
+		HashMap<String, Vertex> airports = new HashMap<String, Vertex>();
+		try
+    	{
+			System.out.println("Loading airports");
+    		File file = new File(DATA_FILE_PATH+AIRPORTS_FILENAME);
+    		Scanner inputStream = new Scanner(file);
+            inputStream.useDelimiter("\n");
+            while(inputStream.hasNext())
+            {
+				String line = inputStream.next();
+		        List<String> items = Arrays.asList(line.split("\\s*,\\s*"));
+		        //System.out.println(items.toString());
+		        String airport_code = items.get(4);
+		        if (!airport_code.contains("\\N")){
+		            try {
+		                airport_code = airport_code.replace("\"", "");
+		                Vertex airport = new Vertex(airport_code, // code
+		                        items.get(1), // name
+		                        items.get(3), // Country
+		                        Double.parseDouble(items.get(6)), // latitude
+		                        Double.parseDouble(items.get(7))); // longitude
+		                airports.putIfAbsent(airport_code, airport);
+		            }
+		            catch(NumberFormatException e){
+	                    e.printStackTrace();
+	                   continue;
+	                }
+		        }
+            }
+            inputStream.close();
+            
+            System.out.println("Loading flights");
+            
+            file = new File(DATA_FILE_PATH+FLIGHTS_FILENAME);
+            inputStream = new Scanner(file);
+            inputStream.useDelimiter("\n");
+            while(inputStream.hasNext())
+            {
+                //read single line, put in string
+                String line = inputStream.next();
+                String[] items = line.split("\\s*,\\s*");
+                try {
+                     int nstop = Integer.parseInt(items[7]);
+                     if(nstop == 0) {
+//                             Flight flight = new Flight(airports.get(items.get(2)), airports.get(items.get(4)), nstop);
+                    	 Vertex origin = airports.get(items[2]);
+                    	 Vertex destination = airports.get(items[4]);
+                    	 if(origin != null && destination != null)
+                    	 {
+                    		 Edge edge = new Edge(origin, destination, (int)Edge.calculateDistance(origin, destination));
+                    		 this.addEdge(edge, true);
+                    	 }
+
+                     }
+                 }
+                catch(NumberFormatException e){
+                    e.printStackTrace();
+                   continue;
+                }
+            }
+            inputStream.close();
+            
+    	}
+		catch(Exception e){
+            e.printStackTrace();
+        }
+		
+		
+	}
 
 //	@Override
 //	public String toString()

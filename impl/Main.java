@@ -9,16 +9,16 @@ public class Main {
 	{
 		// Run the program with four arguments as below
 		// 1 5 ALL /raj/UT-Masters/Spring2019/Algorithms/Practice/src/com/ut/practice/datastructure/USA-road-d.NY-small.gr
-//		if(args.length < 4)
-//		{
-//			System.out.println("Please pass source, destination, runmode and datafile \n");
-//			System.out.println("java -jar project-ShortestPath.jar 1 5 Dijkstra /raj/UT-Masters/Spring2019/Algorithms/Project/Data/USA-road-d.NY.gr");
-//			return;
-//		}
+		if(args.length < 4)
+		{
+			System.out.println("Please pass source, destination, runmode and datafile \n");
+			System.out.println("java -jar project-ShortestPath.jar 1 5 Dijkstra /raj/UT-Masters/Spring2019/Algorithms/Project/Data/USA-road-d.NY.gr");
+			return;
+		}
 		System.out.println("--------- START ------------");
 
-//		Graph g = new Graph("NY-small");
-		Graph g = new Graph("NY"); // load data into graph object - load airports/flights data. re-used.
+
+		Graph g = new Graph("AIRPORTS_FLIGHTS"); // load data into graph object - load airports/flights data. re-used.
 		System.out.println("Source node = " + args[0]);
 		System.out.println("Destination node = " + args[1]);
 		System.out.println("Run mode = " + args[2]);
@@ -27,11 +27,15 @@ public class Main {
 		String end_test = args[1];
 		String runMode = args[2];
 		g.setDatafile(args[3]);
-//		String start_test = "173";
-//		String end_test = "463";
+
+//		Graph g = new Graph("AIRPORTS_FLIGHTS");
+////		String start_test = "173";
+////		String end_test = "463";
+//		String start_test = "HOU";
+//		String end_test = "LHR";
 //		String runMode = "ALL";
-//		g.setDatafile("");
-		g.loadFiles();
+//		g.setDatafile("AIRPORTS_FLIGHTS");
+//		g.loadFiles();
 
 		Route shortestRoute;
 		if (runMode.equalsIgnoreCase("ALL") || runMode.equalsIgnoreCase("Dijkstra")) {
